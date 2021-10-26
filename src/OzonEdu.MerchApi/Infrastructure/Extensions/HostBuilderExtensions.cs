@@ -23,8 +23,6 @@ namespace OzonEdu.MerchApi.Infrastructure.Extensions
                     options.SwaggerDoc("v1", new OpenApiInfo {Title = "OzonEdu.MerchApi", Version = "v1"});
                 
                     options.CustomSchemaIds(x => x.FullName);
-                
-                    //options.OperationFilter<HeaderOperationFilter>();
                 });
                 
                 services.AddGrpc(options => options.Interceptors.Add<LoggingInterceptor>());
