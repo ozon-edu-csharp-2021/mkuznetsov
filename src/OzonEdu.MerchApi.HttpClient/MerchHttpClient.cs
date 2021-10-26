@@ -27,10 +27,13 @@ namespace OzonEdu.MerchApi.HttpClient
             return JsonSerializer.Deserialize<List<MerchHistoryResult>>(body);
         }
 
-        public Task<MerchOrderResult> MakeOrder(MerchOrderPost merchOrder, CancellationToken token)
+        public async Task<MerchOrderResult> MakeOrder(MerchOrderPost merchOrder, CancellationToken token)
         {
-            //using var response = await _httpClient.PostAsync("/api/merch")
-            throw new NotImplementedException();
+            var json = JsonSerializer.Serialize(merchOrder);
+            MsHttp.HttpContent content = new MsHttp.StringContent(json);
+            using var response = await _httpClient.PostAsync($"{_serverUrl}/api/merch/order", content, token);
+            var body = await response.Content.ReadAsStringAsync(token);
+            return JsonSerializer.Deserialize<MerchOrderResult>(body) ?? throw new InvalidOperationException();
         }
     }
 }
