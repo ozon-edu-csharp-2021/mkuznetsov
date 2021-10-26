@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  merchandise-service:
+  merch-api:
     build: ../
-    hostname: merchandise-service
+    hostname: merch-api
     ports:
       - "8080:80"
     depends_on:

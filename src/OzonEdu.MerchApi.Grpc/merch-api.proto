@@ -1,0 +1,49 @@
+syntax = "proto3";
+option csharp_namespace = "OzonEdu.MerchApi.Grpc";
+package MerchApi;
+
+service MerchApiGrpc {
+  rpc GetHistory (GetHistoryRequest) returns (GetHistoryResponse);
+  
+  rpc MakeOrder (MakeOrderRequest) returns (MakeOrderResponse);
+}
+
+message GetHistoryRequest {
+  int64 employee_id = 1;
+}
+
+message GetHistoryResponse {
+  repeated GetHistoryResponseUnit orders = 1;
+}
+
+message GetHistoryResponseUnit {
+  int64 employee_id = 1;
+  MerchType merch_type = 2;
+  string issue_date = 3;
+  OrderStatus status = 4;
+}
+
+message MakeOrderRequest {
+  int64 employee_id = 1;
+  MerchType merch_type = 2;
+}
+
+message MakeOrderResponse {
+  OrderStatus status = 1;
+}
+
+enum MerchType {
+  NONE = 0;
+  WELCOME_PACK = 10;
+  CONFERENCE_LISTENER_PACK = 20;
+  CONFERENCE_SPEAKER_PACK = 30;
+  PROBATION_PERIOD_ENDING_PACK = 40;
+  VETERAN_PACK = 50;
+}
+
+enum OrderStatus {
+  UNKNOWN = 0;
+  READY = 10;
+  WAITING = 20;
+  UNAVAILABLE = 30;
+}
