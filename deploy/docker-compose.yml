@@ -6,8 +6,6 @@ services:
     hostname: merch-api
     ports:
       - "8080:80"
-    depends_on:
-      - stock-api
   
   emailing-service:
     image: 'ghcr.io/ozon-edu-csharp-2021/emailing-service:main'

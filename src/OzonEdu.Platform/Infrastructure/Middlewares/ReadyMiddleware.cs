@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace OzonEdu.MerchApi.Infrastructure.Middlewares
+namespace OzonEdu.Platform.Infrastructure.Middlewares
 {
-    public class LiveMiddleware
+    public class ReadyMiddleware
     {
-        public LiveMiddleware(RequestDelegate next) { }
+        public ReadyMiddleware(RequestDelegate next) { }
         
         public async Task InvokeAsync(HttpContext context)
         {

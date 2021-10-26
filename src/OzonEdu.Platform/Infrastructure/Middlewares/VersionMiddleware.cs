@@ -3,7 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace OzonEdu.MerchApi.Infrastructure.Middlewares
+namespace OzonEdu.Platform.Infrastructure.Middlewares
 {
     public class VersionMiddleware
     {

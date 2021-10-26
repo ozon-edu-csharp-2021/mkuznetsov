@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace OzonEdu.MerchApi.Infrastructure.Filters
+namespace OzonEdu.Platform.Infrastructure.Filters
 {
     public class GlobalExceptionFilter : ExceptionFilterAttribute
     {

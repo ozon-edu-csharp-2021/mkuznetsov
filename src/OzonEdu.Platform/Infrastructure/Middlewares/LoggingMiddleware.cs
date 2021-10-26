@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace OzonEdu.MerchApi.Infrastructure.Middlewares
+namespace OzonEdu.Platform.Infrastructure.Middlewares
 {
     public class LoggingMiddleware
     {

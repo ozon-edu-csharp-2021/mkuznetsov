@@ -3,7 +3,7 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;
 
-namespace OzonEdu.MerchApi.Infrastructure.Interceptors
+namespace OzonEdu.Platform.Infrastructure.Interceptors
 {
     public class LoggingInterceptor : Interceptor
     {
@@ -18,7 +18,8 @@ namespace OzonEdu.MerchApi.Infrastructure.Interceptors
             UnaryServerMethod<TRequest, TResponse> continuation)
         {
             var response = await base.UnaryServerHandler(request, context, continuation);
-            _logger.LogInformation($"Grpc request:\n{request}\nGrpc response:\n{response}");
+            var method = context.Method;
+            _logger.LogInformation($"Grpc call: {method}\nrequest:\n{request}\nGrpc response:\n{response}");
             return response;
         }
     }
