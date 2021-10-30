@@ -26,7 +26,7 @@ namespace OzonEdu.Platform.Infrastructure.Middlewares
 
         private void LogRequest(HttpContext context)
         {
-            if (!context.Request.IsHttps) return;
+            if (context.Request.ContentType == "application/grpc") return;
             
             var headers = DictionaryToString(context.Request.Headers);
             var routes = DictionaryToString(context.Request.RouteValues);
@@ -36,8 +36,8 @@ namespace OzonEdu.Platform.Infrastructure.Middlewares
         
         private void LogResponse(HttpContext context)
         {
-            if (!context.Request.IsHttps) return;
-            
+            if (context.Request.ContentType == "application/grpc") return;
+
             var headers = DictionaryToString(context.Response.Headers);
             var routes = DictionaryToString(context.Request.RouteValues);
             

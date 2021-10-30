@@ -7,9 +7,9 @@ namespace OzonEdu.MerchApi.GrpcServices
 {
     public class MerchApiGrpcService : MerchApiGrpc.MerchApiGrpcBase
     {
-        public override async Task<GetHistoryResponse> GetHistory(GetHistoryRequest request, ServerCallContext context)
+        public override Task<GetHistoryResponse> GetHistory(GetHistoryRequest request, ServerCallContext context)
         {
-            return new GetHistoryResponse
+            return Task.FromResult(new GetHistoryResponse
             {
                 Orders =
                 {
@@ -28,15 +28,15 @@ namespace OzonEdu.MerchApi.GrpcServices
                         Status = OrderStatus.Unavailable
                     },
                 }
-            };
+            });
         }
 
-        public override async Task<MakeOrderResponse> MakeOrder(MakeOrderRequest request, ServerCallContext context)
+        public override Task<MakeOrderResponse> MakeOrder(MakeOrderRequest request, ServerCallContext context)
         {
-            return new MakeOrderResponse
+            return Task.FromResult(new MakeOrderResponse
             {
                 Status = OrderStatus.Waiting
-            };
+            });
         }
     }
 }

@@ -8,7 +8,7 @@ namespace OzonEdu.MerchApi.HttpClient
 {
     public interface IMerchHttpClient
     {
-        public Task<List<MerchHistoryResult>?> GetHistory(long employeeId, CancellationToken token);
+        public Task<IReadOnlyList<MerchHistoryResult>?> GetHistory(long employeeId, CancellationToken token);
 
         public Task<MerchOrderResult> MakeOrder(MerchOrderPost merchOrder, CancellationToken token);
     }

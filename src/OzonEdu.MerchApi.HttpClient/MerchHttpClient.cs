@@ -20,7 +20,7 @@ namespace OzonEdu.MerchApi.HttpClient
             _serverUrl = serverUrl;
         }
 
-        public async Task<List<MerchHistoryResult>?> GetHistory(long employeeId, CancellationToken token)
+        public async Task<IReadOnlyList<MerchHistoryResult>?> GetHistory(long employeeId, CancellationToken token)
         {
             using var response = await _httpClient.GetAsync($"{_serverUrl}/api/merch/history/{employeeId}", token);
             var body = await response.Content.ReadAsStringAsync(token);

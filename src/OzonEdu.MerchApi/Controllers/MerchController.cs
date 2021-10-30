@@ -16,7 +16,7 @@ namespace OzonEdu.MerchApi.Controllers
     public class MerchController : ControllerBase
     {
         [HttpGet("[action]/{employeeId:long}")]
-        public async Task<ActionResult<List<MerchHistoryResult>>> History(long employeeId, CancellationToken token)
+        public ActionResult<List<MerchHistoryResult>> History(long employeeId, CancellationToken token)
         {
             if (employeeId != 1 && employeeId != 2) throw new ArgumentException("employeeId is wrong!");
             
@@ -49,7 +49,7 @@ namespace OzonEdu.MerchApi.Controllers
         }
  
         [HttpPost("[action]")]
-         public async Task<ActionResult<MerchOrderResult>> Order(MerchOrderPost merchOrder, CancellationToken token)
+         public ActionResult<MerchOrderResult> Order(MerchOrderPost merchOrder, CancellationToken token)
          {
             var employeeId = merchOrder.EmployeeId;
             if (employeeId != 1 && employeeId != 2) throw new ArgumentException("employeeId is wrong!");
