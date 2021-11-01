@@ -1,13 +1,18 @@
 version: '3.8'
 
 services:
-  merchandise-service:
+  merch-api:
     build: ../
-    hostname: merchandise-service
+    hostname: merch-api
     ports:
-      - "8080:80"
-    depends_on:
-      - stock-api
+      - "5000:5000"
+      - "5001:5001"
+      - "5004:5004"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=MyPasSL
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ../.aspnet/https:/https:ro
   
   emailing-service:
     image: 'ghcr.io/ozon-edu-csharp-2021/emailing-service:main'

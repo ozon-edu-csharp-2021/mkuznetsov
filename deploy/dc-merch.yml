@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  merch-api:
+    build: ../
+    hostname: merch-api
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+      - "5004:5004"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=MyPasSL
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ../.aspnet/https:/https:ro
