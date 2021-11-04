@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using CSharpCourse.Core.Lib.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OzonEdu.MerchApi.HttpModels.Enums;
+using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
+using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.HttpModels.Request;
-using OzonEdu.MerchApi.HttpModels.Response;
+using OzonEdu.MerchApi.Infrastructure.Commands;
+using OzonEdu.MerchApi.Infrastructure.Queries;
 
 namespace OzonEdu.MerchApi.Controllers
 {
@@ -15,51 +15,43 @@ namespace OzonEdu.MerchApi.Controllers
     [Route("api/[controller]")]
     public class MerchController : ControllerBase
     {
-        [HttpGet("[action]/{employeeId:long}")]
-        public ActionResult<List<MerchHistoryResult>> History(long employeeId, CancellationToken token)
-        {
-            if (employeeId != 1 && employeeId != 2) throw new ArgumentException("employeeId is wrong!");
-            
-            var merches = new List<MerchHistoryResult>()
-            {
-                new()
-                {
-                    EmployeeId = 1,
-                    IssueDate = DateTime.Now,
-                    MerchType = MerchType.WelcomePack,
-                    Status = OrderStatus.Waiting
-                },
-                new()
-                {
-                    EmployeeId = 1,
-                    IssueDate = DateTime.Now,
-                    MerchType = MerchType.ConferenceListenerPack,
-                    Status = OrderStatus.Ready
-                },
-                new()
-                {
-                    EmployeeId = 2,
-                    IssueDate = DateTime.Now,
-                    MerchType = MerchType.ConferenceListenerPack,
-                    Status = OrderStatus.Ready
-                }
-            };
+        private readonly IMediator _mediator;
 
-            return Ok(merches.Where(m => m.EmployeeId == employeeId).ToList());
-        }
- 
-        [HttpPost("[action]")]
-         public ActionResult<MerchOrderResult> Order(MerchOrderPost merchOrder, CancellationToken token)
-         {
-            var employeeId = merchOrder.EmployeeId;
-            if (employeeId != 1 && employeeId != 2) throw new ArgumentException("employeeId is wrong!");
-                
-            var result = new MerchOrderResult()
+        public MerchController(IMediator mediator) => _mediator = mediator;
+
+        [HttpGet("[action]/{employeeId:long}")]
+        public async Task<ActionResult<IEnumerable<Merch>>> History(long employeeId, CancellationToken cancellationToken)
+        {
+            var query = new GetMerchByEmployeeIdQuery
             {
-                Status = OrderStatus.Ready
+                EmployeeId = employeeId
             };
+            
+            var result = await _mediator.Send(query, cancellationToken);
 
             return Ok(result);
         }
+ 
+        [HttpPost("[action]")]
+        public async Task<ActionResult<MerchStatus>>Order(MerchOrderPost merchOrder, CancellationToken cancellationToken)
+        {
+            var query = new OrderMerchCommand
+            {
+                EmployeeId = new EmployeeId(merchOrder.EmployeeId),
+                MerchType = MerchType.FromValue<MerchType>((int)merchOrder.MerchType),
+            };
+
+            var result = await _mediator.Send(query, cancellationToken);
+
+            return Ok(result);
+        }
+
+         // [HttpGet("[action]/{employeeId:long}")]
+         // public async Task<ActionResult<Employee>> Employee(long employeeId)
+         // {
+         //     var employee = await _mediator.Send(new GetEmployeeRequest {EmployeeId = employeeId});
+         //
+         //     return Ok(employee);
+         // }
     }
 }
