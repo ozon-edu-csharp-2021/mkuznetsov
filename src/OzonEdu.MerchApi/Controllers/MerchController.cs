@@ -3,10 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
-using OzonEdu.MerchApi.HttpModels.Request;
 using OzonEdu.MerchApi.Infrastructure.Commands;
+using OzonEdu.MerchApi.Infrastructure.HttpModels;
 using OzonEdu.MerchApi.Infrastructure.Queries;
 
 namespace OzonEdu.MerchApi.Controllers
@@ -37,21 +36,14 @@ namespace OzonEdu.MerchApi.Controllers
         {
             var query = new OrderMerchCommand
             {
-                EmployeeId = new EmployeeId(merchOrder.EmployeeId),
-                MerchType = MerchType.FromValue<MerchType>((int)merchOrder.MerchType),
+                EmployeeId = merchOrder.EmployeeId,
+                MerchType = merchOrder.MerchType,
+                MerchOptions = merchOrder.MerchOptions
             };
 
             var result = await _mediator.Send(query, cancellationToken);
 
             return Ok(result);
         }
-
-         // [HttpGet("[action]/{employeeId:long}")]
-         // public async Task<ActionResult<Employee>> Employee(long employeeId)
-         // {
-         //     var employee = await _mediator.Send(new GetEmployeeRequest {EmployeeId = employeeId});
-         //
-         //     return Ok(employee);
-         // }
     }
 }

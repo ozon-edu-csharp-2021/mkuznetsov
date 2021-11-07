@@ -8,4 +8,8 @@
       <ProjectReference Include="..\OzonEdu.MerchApi.Domain\OzonEdu.MerchApi.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CSharpCourse.Core.Lib" Version="1.4.0" />
+    </ItemGroup>
+
 </Project>

@@ -12,6 +12,6 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
 
         Task<IEnumerable<Merch>> FindAll(CancellationToken cancellationToken = default);
 
-        Task<MerchStatus> Order(MerchType merchType, EmployeeId employeeId, CancellationToken cancellationToken = default);
+        Task<bool> Insert(Merch merch, CancellationToken cancellationToken = default);
     }
 }

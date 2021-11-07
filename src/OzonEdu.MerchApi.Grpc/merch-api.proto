@@ -26,6 +26,7 @@ message GetHistoryResponseUnit {
 message MakeOrderRequest {
   int64 employee_id = 1;
   MerchType merch_type = 2;
+  map<string, string> merch_options = 3;
 }
 
 message MakeOrderResponse {

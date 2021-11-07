@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Grpc.Core;
 using MediatR;
-using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using dm = OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
+using corelib = CSharpCourse.Core.Lib.Enums;
 using OzonEdu.MerchApi.Grpc;
 using OzonEdu.MerchApi.Infrastructure.Commands;
 using OzonEdu.MerchApi.Infrastructure.Queries;
@@ -53,8 +53,9 @@ namespace OzonEdu.MerchApi.GrpcServices
         {
             var query = new OrderMerchCommand
             {
-                EmployeeId = new EmployeeId(request.EmployeeId),
-                MerchType = dm.MerchType.FromValue<dm.MerchType>((int)request.MerchType),
+                EmployeeId = request.EmployeeId,
+                MerchType = corelib.MerchType.TryParse<corelib.MerchType>(request.MerchType.ToString(), out var mType) ? mType : corelib.MerchType.WelcomePack,
+                MerchOptions = request.MerchOptions
             };
 
             var result = await _mediator.Send(query, context.CancellationToken);

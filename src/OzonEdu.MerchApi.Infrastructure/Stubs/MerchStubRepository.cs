@@ -20,42 +20,38 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                     MerchType.WelcomePack,
                     new EmployeeId(1),
                     new IssueDate(new DateTime(2020, 10, 12)),
-                    MerchStatus.Ready),
+                    MerchStatus.Ready,
+                    null),
                 new Merch(
                     MerchType.ConferenceListenerPack,
                     new EmployeeId(1),
                     new IssueDate(new DateTime(2021, 11, 2)),
-                    MerchStatus.Ready),
+                    MerchStatus.Ready,
+                    null),
                 new Merch(
                     MerchType.VeteranPack,
                     new EmployeeId(2),
                     new IssueDate(new DateTime(2021, 10, 20)),
-                    MerchStatus.Ready),
+                    MerchStatus.Ready,
+                    null),
                 new Merch(
                     MerchType.ConferenceSpeakerPack,
                     new EmployeeId(2),
                     new IssueDate(new DateTime(2021, 11, 2)),
-                    MerchStatus.Ready),
+                    MerchStatus.Ready,
+                    null),
                 new Merch(
                     MerchType.ConferenceListenerPack,
                     new EmployeeId(3),
                     new IssueDate(new DateTime(2021, 11, 2)),
-                    MerchStatus.Ready),
+                    MerchStatus.Ready,
+                    null),
             };
         }
         
         public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(EmployeeId employeeId, CancellationToken cancellationToken = default)
         {
             IEnumerable<Merch> merches = null;
-            if (_merches != null)
-            {
-                merches = _merches.Where(m => m.EmployeeId.Equals(employeeId));
-            }
-
-            if (merches != null)
-            {
-                return merches;
-            }
             
             _merches = await FindAll(cancellationToken);
             
@@ -67,15 +63,11 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             return Task.FromResult(_merches);
         }
 
-        public async Task<MerchStatus> Order(MerchType merchType, EmployeeId employeeId, CancellationToken cancellationToken = default)
+        public async Task<bool> Insert(Merch merch, CancellationToken cancellationToken = default)
         {
-            ((List<Merch>)_merches).Add(
-                new Merch(merchType: merchType,
-                    employeeId: employeeId,
-                    issueDate: new IssueDate(DateTime.Now),
-                    merchStatus: MerchStatus.Ready ));
+            ((List<Merch>)_merches).Add(merch);
 
-            return MerchStatus.Ready;
+            return true;
         }
     }
 }

@@ -1,13 +1,15 @@
-﻿using MediatR;
-using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
+﻿using System.Collections.Generic;
+using MediatR;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 
 namespace OzonEdu.MerchApi.Infrastructure.Commands
 {
     public class OrderMerchCommand : IRequest<MerchStatus>
     {
-        public MerchType MerchType { get; init; }
+        public CSharpCourse.Core.Lib.Enums.MerchType MerchType { get; init; }
         
-        public EmployeeId EmployeeId { get; init; }
+        public long EmployeeId { get; init; }
+        
+        public IDictionary<string, string> MerchOptions { get; init; }
     }
 }
