@@ -10,6 +10,6 @@ namespace OzonEdu.MerchApi.Infrastructure.Commands
         
         public long EmployeeId { get; init; }
         
-        public IDictionary<string, string> MerchOptions { get; init; }
+        public IList<long> MerchOptions { get; init; }
     }
 }

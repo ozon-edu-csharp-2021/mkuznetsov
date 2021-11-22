@@ -23,7 +23,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
         public Task<MerchStatus> Handle(OrderMerchCommand request, CancellationToken cancellationToken)
         {
             var options = request.MerchOptions
-                .Select(d => Tuple.Create(new SkuOption(d.Key), new SkuOptionValue(d.Value)))
+                .Select(d => new SkuOption(d))
                 .ToHashSet();
             
             return _merchService.OrderMerch(MerchType.FromValue<MerchType>((int)request.MerchType), new EmployeeId(request.EmployeeId), options, cancellationToken);

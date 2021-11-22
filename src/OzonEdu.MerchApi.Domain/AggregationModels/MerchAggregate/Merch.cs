@@ -11,14 +11,14 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
         public EmployeeId EmployeeId { get; }
         public IssueDate IssueDate { get; }
         public MerchStatus MerchStatus { get; }
-        public Dictionary<long, Quantity> SkuSet { get; }
+        public Dictionary<Sku, Quantity> SkuSet { get; }
 
         public Merch(
             MerchType merchType,
             EmployeeId employeeId,
             IssueDate issueDate,
             MerchStatus merchStatus,
-            Dictionary<long, Quantity> skuSet)
+            Dictionary<Sku, Quantity> skuSet)
         {
             MerchType = merchType;
             EmployeeId = employeeId;

@@ -21,7 +21,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
             _merchConfigurator = merchConfigurator;
         }
         
-        public async Task<MerchStatus> OrderMerch(MerchType merchType, EmployeeId employeeId, ISet<Tuple<SkuOption, SkuOptionValue>> merchOptions, CancellationToken cancellationToken = default)
+        public async Task<MerchStatus> OrderMerch(MerchType merchType, EmployeeId employeeId, ISet<SkuOption> merchOptions, CancellationToken cancellationToken = default)
         {
             var merchStatus = MerchStatus.Unavailable;
 

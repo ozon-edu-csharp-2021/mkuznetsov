@@ -9,6 +9,6 @@ namespace OzonEdu.MerchApi.Infrastructure.HttpModels
         
         public MerchType MerchType { get; set; }
         
-        public Dictionary<string, string> MerchOptions { get; set; }
+        public IList<long> MerchOptions { get; set; }
     }
 }

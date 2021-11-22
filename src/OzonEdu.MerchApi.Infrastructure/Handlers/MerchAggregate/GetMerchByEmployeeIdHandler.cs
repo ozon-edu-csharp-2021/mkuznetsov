@@ -1,22 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
-using OzonEdu.MerchApi.Infrastructure.Commands;
+using OzonEdu.MerchApi.Infrastructure.HttpModels;
 using OzonEdu.MerchApi.Infrastructure.Queries;
+using MerchStatus = OzonEdu.MerchApi.Infrastructure.HttpModels.MerchStatus;
+using MType = CSharpCourse.Core.Lib.Enums.MerchType;
 
 namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
 {
-    public class GetMerchByEmployeeIdHandler : IRequestHandler<GetMerchByEmployeeIdQuery, IEnumerable<Merch>>
+    public class GetMerchByEmployeeIdHandler : IRequestHandler<GetMerchByEmployeeIdQuery, IEnumerable<MerchInfo>>
     {
         private readonly IMerchRepository _merchRepository;
 
         public GetMerchByEmployeeIdHandler(IMerchRepository merchRepository) =>
             _merchRepository = merchRepository;
+
+        public async Task<IEnumerable<MerchInfo>> Handle(GetMerchByEmployeeIdQuery request,
+            CancellationToken cancellationToken)
+        {
+            var merchList =
+                await _merchRepository.FindByEmployeeIdAsync(new EmployeeId(request.EmployeeId), cancellationToken);
+
+            return PrepareResponse(merchList);
+        }
+
+        private IEnumerable<MerchInfo> PrepareResponse(IEnumerable<Merch> merchList) =>
+            merchList.Select(m => ConvertMerch(m)).ToList();
         
-        public Task<IEnumerable<Merch>> Handle(GetMerchByEmployeeIdQuery request, CancellationToken cancellationToken) =>
-            _merchRepository.FindByEmployeeIdAsync(new EmployeeId(request.EmployeeId), cancellationToken);
+
+        private MerchInfo ConvertMerch(Merch merch)
+        {
+            var skus = merch.SkuSet
+                ?.ToDictionary(t => t.Key.Value, t => t.Value.Value );
+
+            return new MerchInfo
+                {
+                MerchType = (MType) merch.MerchType.Id,
+                EmployeeId = merch.EmployeeId.Value,
+                IssueDate = merch.IssueDate.Value,
+                MerchStatus = (MerchStatus) merch.MerchStatus.Id,
+                SkuSet = skus
+            };
+        }
     }
 }

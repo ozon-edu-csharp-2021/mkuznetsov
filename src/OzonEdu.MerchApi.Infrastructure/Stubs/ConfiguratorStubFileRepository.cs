@@ -6,7 +6,7 @@ using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 
 namespace OzonEdu.MerchApi.Infrastructure.Stubs
 {
-    public class ConfiguratorStubFileRepository : IConfiguratorRepository
+    public class ConfiguratorStubFileRepository // : IConfiguratorRepository
     {
         public IDictionary<SkuGroup, IDictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>> GetSkuSet()
         {
@@ -29,7 +29,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             {
                 var skuGroup = new SkuGroup(option[0]);
                 var sku = new Sku(long.Parse(option[1]));
-                var skuOption = new SkuOption(option[2]);
+                //var skuOption = new SkuOption(option[2]);
                 var skuOptionVal = new SkuOptionValue(option[3]);
 
                 ISet<Tuple<Sku, Tuple<SkuOption, SkuOptionValue>>> skuOptions = null;
@@ -44,7 +44,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                     tempSet[skuGroup] = skuOptions;
                 }
 
-                skuOptions.Add(Tuple.Create(sku, Tuple.Create(skuOption, skuOptionVal)));
+                //skuOptions.Add(Tuple.Create(sku, Tuple.Create(skuOption, skuOptionVal)));
 
             }
             

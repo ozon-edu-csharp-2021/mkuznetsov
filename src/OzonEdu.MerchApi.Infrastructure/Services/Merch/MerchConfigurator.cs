@@ -8,7 +8,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
     public class MerchConfigurator : IMerchConfigurator
     {
         private readonly IConfiguratorRepository _configuratorRepository;
-        public IDictionary<SkuGroup, IDictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>> SkuSelector { get; init; }
+        public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> SkuSelector { get; init; }
         public IDictionary<MerchType, ISet<Tuple<SkuGroup, Quantity>>> MerchTemplates { get; init; }
 
         public MerchConfigurator(IConfiguratorRepository configuratorRepository)
@@ -20,22 +20,21 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
             MerchTemplates = _configuratorRepository.GetMerchTemplates();
         }
         
-        public Dictionary<long, Quantity> Configure(MerchType merchType, ISet<Tuple<SkuOption, SkuOptionValue>> options)
+        public Dictionary<Sku, Quantity> Configure(MerchType merchType, ISet<SkuOption> options)
         {
             var templSet = MerchTemplates[merchType];
 
-            //ISet<Tuple<Sku, Quantity>> result = new HashSet<Tuple<Sku, Quantity>>();
-            Dictionary<long, Quantity> result = new Dictionary<long, Quantity>();
+            Dictionary<Sku, Quantity> result = new Dictionary<Sku, Quantity>();
 
             foreach (var merchItem in templSet)
             {
                 var (skuGroup, quantity) = merchItem.ToValueTuple();
                 var sku = SkuSelector[skuGroup]
-                    .Where(opt => opt.Key.IsSubsetOf(options))
+                    .Where(opt => options.Contains(opt.Key))
                     .Select(opt => opt.Value)
                     .First();
 
-                result[sku.Value] = quantity;
+                result[sku] = quantity;
             }
 
             return result;

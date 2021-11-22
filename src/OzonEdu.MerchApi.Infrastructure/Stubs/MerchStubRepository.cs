@@ -45,7 +45,11 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                     new EmployeeId(3),
                     new IssueDate(new DateTime(2021, 11, 2)),
                     MerchStatus.Ready,
-                    null),
+                    new Dictionary<Sku, Quantity>
+                    {
+                        {new Sku(23343), new Quantity(1)},
+                        {new Sku(4534), new Quantity(2)}
+                    }),
             };
         }
         
@@ -55,7 +59,9 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             
             _merches = await FindAll(cancellationToken);
             
-            return _merches.Where(m => m.EmployeeId.Equals(employeeId));
+            var res = _merches.Where(m => m.EmployeeId.Value == employeeId.Value);
+
+            return res;
         }
 
         public Task<IEnumerable<Merch>> FindAll(CancellationToken cancellationToken = default)

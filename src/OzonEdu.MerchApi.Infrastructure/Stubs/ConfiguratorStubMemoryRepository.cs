@@ -7,152 +7,106 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
     public class ConfiguratorStubMemoryRepository : IConfiguratorRepository
     {
         
-        public IDictionary<SkuGroup, IDictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>> GetSkuSet()
+        public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> GetSkuSet()
         {
-            IDictionary<SkuGroup, IDictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>> skuSet;
+            IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> skuSet;
             
-            skuSet = new Dictionary<SkuGroup, IDictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>>();
-            skuSet[new SkuGroup("pen")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet = new Dictionary<SkuGroup, IDictionary<SkuOption, Sku>>();
+            skuSet[new SkuGroup("pen")] = new Dictionary<SkuOption,Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("size"), new SkuOptionValue("big")),
-                    },
+                    new SkuOption(1, "small pen"),
                     new Sku(1)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("size"), new SkuOptionValue("small")),
-                    },
+                    new SkuOption(2, "big pen"),
                     new Sku(2)
                 },
             };
-            skuSet[new SkuGroup("cup")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet[new SkuGroup("cup")] = new Dictionary<SkuOption, Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("color"), new SkuOptionValue("white")),
-                    },
+                    new SkuOption(3, "white cup"),
                     new Sku(11)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("color"), new SkuOptionValue("black")),
-                    },
+                    new SkuOption(4, "black cup"),
+                    new Sku(12)
+                },
+                {
+                    new SkuOption(5, "green cup"),
+                    new Sku(11)
+                },
+                {
+                    new SkuOption(6, "red cup"),
                     new Sku(12)
                 },
             };
-            skuSet[new SkuGroup("t-shirt")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet[new SkuGroup("t-shirt")] = new Dictionary<SkuOption, Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("dresssize"), new SkuOptionValue("s")),
-                    },
+                    new SkuOption(7, "s t-shirt"),
                     new Sku(101)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("dresssize"), new SkuOptionValue("m")),
-                    },
-                    new Sku(102)
+                    new SkuOption(8, "m t-shirt"),
+                    new Sku(101)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("dresssize"), new SkuOptionValue("l")),
-                    },
-                    new Sku(103)
+                    new SkuOption(9, "l t-shirt"),
+                    new Sku(101)
                 },
             };
-            skuSet[new SkuGroup("hoodie")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet[new SkuGroup("hoodie")] = new Dictionary<SkuOption, Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("dresssize"), new SkuOptionValue("s")),
-                    },
-                    new Sku(1001)
+                    new SkuOption(10, "s hoodie"),
+                    new Sku(101)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("dresssize"), new SkuOptionValue("m")),
-                    },
-                    new Sku(1002)
+                    new SkuOption(11, "m hoodie"),
+                    new Sku(101)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("dresssize"), new SkuOptionValue("l")),
-                    },
-                    new Sku(1003)
+                    new SkuOption(12, "l hoodie"),
+                    new Sku(101)
                 },
             };
-            skuSet[new SkuGroup("earplug")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet[new SkuGroup("earplug")] = new Dictionary<SkuOption, Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("size"), new SkuOptionValue("big")),
-                    },
-                    new Sku(10001)
+                    new SkuOption(13, "small earplug"),
+                    new Sku(1)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("size"), new SkuOptionValue("small")),
-                    },
-                    new Sku(10002)
+                    new SkuOption(14, "big earplug"),
+                    new Sku(2)
                 },
             };
-            skuSet[new SkuGroup("mouthguard")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet[new SkuGroup("mouthguard")] = new Dictionary<SkuOption, Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("size"), new SkuOptionValue("big")),
-                    },
-                    new Sku(100001)
+                    new SkuOption(15, "small mouthguard"),
+                    new Sku(1)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("size"), new SkuOptionValue("small")),
-                    },
-                    new Sku(100002)
+                    new SkuOption(18, "big mouthguard"),
+                    new Sku(2)
                 },
             };
-            skuSet[new SkuGroup("car")] = new Dictionary<ISet<Tuple<SkuOption, SkuOptionValue>>, Sku>()
+            skuSet[new SkuGroup("car")] = new Dictionary<SkuOption, Sku>()
             {
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("brand"), new SkuOptionValue("toyota")),
-                        Tuple.Create(new SkuOption("model"), new SkuOptionValue("cruiser")),
-                    },
-                    new Sku(1000001)
+                    new SkuOption(17, "toyota camry"),
+                    new Sku(1)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("brand"), new SkuOptionValue("toyota")),
-                        Tuple.Create(new SkuOption("model"), new SkuOptionValue("camry")),
-                    },
-                    new Sku(1000002)
+                    new SkuOption(18, "subaru impreza"),
+                    new Sku(2)
                 },
                 {
-                    new HashSet<Tuple<SkuOption, SkuOptionValue>>()
-                    {
-                        Tuple.Create(new SkuOption("brand"), new SkuOptionValue("subaru")),
-                        Tuple.Create(new SkuOption("model"), new SkuOptionValue("impreza")),
-                    },
-                    new Sku(1000003)
+                    new SkuOption(19, "suzuki escudo"),
+                    new Sku(1)
                 },
             };
 

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.Infrastructure.Handlers;
+using OzonEdu.MerchApi.Infrastructure.Repositories.Implementation;
 using OzonEdu.MerchApi.Infrastructure.Services;
 using OzonEdu.MerchApi.Infrastructure.Stubs;
 
@@ -32,11 +33,11 @@ namespace OzonEdu.MerchApi.Infrastructure.Extensions
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
-            services.AddSingleton<IConfiguratorRepository, ConfiguratorStubMemoryRepository>();
-            services.AddSingleton<IMerchConfigurator, MerchConfigurator>();
-            services.AddSingleton<IMerchService, MerchService>();
-            services.AddSingleton<IEmployeeRepository, EmployeeStubRepository>();
-            services.AddSingleton<IMerchRepository, MerchStubRepository>();
+            services.AddScoped<IConfiguratorRepository, ConfiguratorStubMemoryRepository>();
+            services.AddScoped<IMerchConfigurator, MerchConfigurator>();
+            services.AddScoped<IMerchService, MerchService>();
+            services.AddScoped<IEmployeeRepository, EmployeeStubRepository>();
+            services.AddScoped<IMerchRepository, MerchRepository>();
             
             return services;
         }

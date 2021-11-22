@@ -5,6 +5,6 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
 {
     public interface IMerchConfigurator
     {
-        public Dictionary<long, Quantity> Configure(MerchType merchType, ISet<Tuple<SkuOption, SkuOptionValue>> options);
+        public Dictionary<Sku, Quantity> Configure(MerchType merchType, ISet<SkuOption> options);
     }
 }

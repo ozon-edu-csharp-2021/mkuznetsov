@@ -7,6 +7,7 @@ using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.Infrastructure.Commands;
 using OzonEdu.MerchApi.Infrastructure.HttpModels;
 using OzonEdu.MerchApi.Infrastructure.Queries;
+using MerchStatus = OzonEdu.MerchApi.Infrastructure.HttpModels.MerchStatus;
 
 namespace OzonEdu.MerchApi.Controllers
 {
