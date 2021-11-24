@@ -3,7 +3,7 @@ using FluentMigrator.Builders.Create;
 
 namespace OzonEdu.MerchApi.Migrator.Mirgartions
 {
-    [Migration(4)]
+    [Migration(5)]
     public class MerchTemplateMaps : Migration 
     {
         public override void Up()

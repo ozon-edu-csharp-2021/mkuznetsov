@@ -2,20 +2,20 @@
 
 namespace OzonEdu.MerchApi.Migrator.Mirgartions
 {
-    [Migration(2)]
-    public class MerchTypeTable : Migration
+    [Migration(4)]
+    public class ItemTypeTable : Migration
     {
         public override void Up()
         {
             Create
-                .Table("merch_types")
-                .WithColumn("id").AsInt64().PrimaryKey()
+                .Table("item_types")
+                .WithColumn("id").AsInt32().PrimaryKey()
                 .WithColumn("name").AsString().NotNullable();
         }
 
         public override void Down()
         {
-            Delete.Table("merch_types");
+            Delete.Table("item_types");
         }
     }
 }

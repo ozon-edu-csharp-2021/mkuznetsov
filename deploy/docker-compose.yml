@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   merch-api:
-    build: ../
-    hostname: merch-api
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
     ports:
       - "5000:5000"
       - "5001:5001"
@@ -11,6 +12,9 @@ services:
     environment:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=MyPasSL
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - DatabaseConnectionOptions__ConnectionString=Host=host.docker.internal;Port=5425;Database=merch-api;Username=postgres;Password=merchApiPassword
+    depends_on:
+      - merch-api-db
     volumes:
       - ../.aspnet/https:/https:ro
   
@@ -54,8 +58,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: stockApiPassword
       POSTGRES_DB: stock-api
-    volumes:
-      - ./db/stock-api-postgres-db/dbdata:/var/lib/postgresql/data"
 
   supply-service-db:
     image: postgres:latest
@@ -65,3 +67,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: supplyServicePassword
       POSTGRES_DB: supply-service  
+
+  merch-api-db:
+    image: postgres:latest
+    ports:
+      - "5425:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: merchApiPassword
+      POSTGRES_DB: merch-api

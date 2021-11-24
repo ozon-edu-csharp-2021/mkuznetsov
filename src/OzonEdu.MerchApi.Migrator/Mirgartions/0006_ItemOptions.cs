@@ -2,7 +2,7 @@
 
 namespace OzonEdu.MerchApi.Migrator.Mirgartions
 {
-    [Migration(5)]
+    [Migration(6)]
     public class ItemOptions : Migration
     {
         public override void Up()

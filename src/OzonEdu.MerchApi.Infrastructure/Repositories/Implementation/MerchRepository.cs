@@ -24,7 +24,8 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
         public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(EmployeeId employeeId, CancellationToken cancellationToken = default)
         {
             const string sql = @"
-                select m.id, m.type_id MerchType, m.merch_status MerchStatus, m.employee_id EmployeeId, m.issue_date IssueDate
+                select m.id, m.type_id MerchType, m.merch_status MerchStatus,
+                       m.employee_id EmployeeId, m.issue_date IssueDate
                   from merches m
                  where m.employee_id = @EmployeeId";
 
@@ -39,16 +40,44 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
                 commandTimeout: Timeout,
                 cancellationToken: cancellationToken);
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
-            var merchesDb = await connection.QueryAsync<MerchDb>(commandDefinition);
+            var merchesDb = await connection.QueryAsync<MerchDb>(
+                commandDefinition);
 
-            var result =merchesDb.Select(m => new Merch(
+            var merches = merchesDb.Select(m => new Merch(
+                m.Id,
                 MerchType.FromValue<MerchType>((int) m.MerchType),
                 new EmployeeId(m.EmployeeId),
                 new IssueDate(m.IssueDate),
                 MerchStatus.FromValue<MerchStatus>((int)m.MerchStatus),
-                null
-                ));
+                new Dictionary<Sku, Quantity>()
+                ))
+                .ToDictionary(m => m.Id, m => m);
 
+            const string sqlSku = @"
+                select ms.merch_id MerchId, ms.sku_id SkuId, ms.quantity 
+                  from merches m
+                  join merch_sku ms
+                    on m.id = ms.merch_id
+                 where m.employee_id = @EmployeeId";
+            
+            var commandDefinitionSku = new CommandDefinition(
+                sqlSku,
+                parameters: parameters,
+                commandTimeout: Timeout,
+                cancellationToken: cancellationToken);
+            
+            var merchesSku = await connection.QueryAsync<MerchSkuDb>(
+                commandDefinitionSku);
+
+            foreach (var sku in merchesSku)
+            {
+                merches[sku.MerchId].SkuSet[new Sku(sku.SkuId)] = new Quantity(sku.Quantity);
+            }
+
+            var result = merches.ToHashSet()
+                .Select(kv => kv.Value)
+                .ToList();
+            
             return result;
         }
 

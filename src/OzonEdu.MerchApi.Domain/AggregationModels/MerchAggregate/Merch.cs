@@ -26,5 +26,21 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
             MerchStatus = merchStatus;
             SkuSet = skuSet;
         }
+        
+        public Merch(
+            long id,
+            MerchType merchType,
+            EmployeeId employeeId,
+            IssueDate issueDate,
+            MerchStatus merchStatus,
+            Dictionary<Sku, Quantity> skuSet)
+        {
+            Id = id;
+            MerchType = merchType;
+            EmployeeId = employeeId;
+            IssueDate = issueDate;
+            MerchStatus = merchStatus;
+            SkuSet = skuSet;
+        }
     }
 }

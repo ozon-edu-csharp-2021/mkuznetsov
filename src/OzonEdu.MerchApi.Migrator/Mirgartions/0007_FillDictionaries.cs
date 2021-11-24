@@ -2,7 +2,7 @@
 
 namespace OzonEdu.MerchApi.Migrator.Mirgartions
 {
-    [Migration(6)]
+    [Migration(7)]
     public class FillDictionaries : ForwardOnlyMigration 
     {
         public override void Up()
