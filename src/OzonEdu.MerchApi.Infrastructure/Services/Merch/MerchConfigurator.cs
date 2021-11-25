@@ -8,8 +8,8 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
     public class MerchConfigurator : IMerchConfigurator
     {
         private readonly IConfiguratorRepository _configuratorRepository;
-        public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> SkuSelector { get; init; }
-        public IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> MerchTemplates { get; init; }
+        private IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> SkuSelector { get; init; }
+        private IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> MerchTemplates { get; init; }
 
         public MerchConfigurator(IConfiguratorRepository configuratorRepository)
         {

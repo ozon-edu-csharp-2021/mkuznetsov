@@ -2,16 +2,15 @@
 
 namespace OzonEdu.MerchApi.Migrator.Mirgartions
 {
-    [Migration(6)]
-    public class ItemOptions : Migration
+    [Migration(4)]
+    public class ItemOptionsTable : Migration 
     {
         public override void Up()
         {
             Create
                 .Table("item_options")
-                .WithColumn("id").AsInt64().PrimaryKey()
-                .WithColumn("item_type_id").AsInt64().NotNullable()
-                .WithColumn("description").AsString().NotNullable();
+                .WithColumn("id").AsInt32().PrimaryKey()
+                .WithColumn("name").AsString().NotNullable();
         }
 
         public override void Down()
