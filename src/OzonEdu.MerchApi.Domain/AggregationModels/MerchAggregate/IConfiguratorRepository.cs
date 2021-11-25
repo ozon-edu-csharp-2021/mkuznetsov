@@ -7,6 +7,6 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
     {
         public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> GetSkuSet();
         
-        public IDictionary<MerchType, ISet<Tuple<SkuGroup, Quantity>>> GetMerchTemplates();
+        public IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> GetMerchTemplates();
     }
 }

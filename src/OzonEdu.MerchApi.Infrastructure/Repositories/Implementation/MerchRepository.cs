@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
@@ -86,9 +87,50 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> Insert(Merch merch, CancellationToken cancellationToken = default)
+        public async Task<bool> Insert(Merch merch, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            const string sql = @"
+                INSERT INTO merches (type_id, merch_status, employee_id, issue_date)
+                VALUES (@MerchType, @MerchStatus, @EmployeeId, @IssueDate)
+                RETURNING id;";
+
+            var parameters = new
+            {
+                MerchType  = merch.MerchType.Id,
+                MerchStatus = merch.MerchStatus.Id,
+                EmployeeId = merch.EmployeeId.Value,
+                IssueDate = merch.IssueDate.Value
+            };
+            var commandDefinition = new CommandDefinition(
+                sql,
+                parameters: parameters,
+                commandTimeout: Timeout,
+                cancellationToken: cancellationToken);
+            var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            var merch_ids = await connection.QueryAsync<long>(commandDefinition); //ExecuteAsync<long>(commandDefinition);
+
+            var merchId = (merch_ids.Count() > 0) ? merch_ids.First() : 0;
+
+            if (merch.SkuSet.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.Append("INSERT INTO merch_sku (merch_id, sku_id, quantity) VALUES ");
+                foreach (var sku in merch.SkuSet)
+                {
+                    sb.Append($"({merchId}, {sku.Key.Value}, {sku.Value.Value}),");
+                }
+
+                sb[^1] = ';';
+
+                var sqlSku = sb.ToString();
+                var commandDefinitionSku = new CommandDefinition(
+                    sqlSku,
+                    commandTimeout: Timeout,
+                    cancellationToken: cancellationToken);
+                await connection.ExecuteAsync(commandDefinitionSku);
+            }
+            
+            return true;
         }
     }
 }

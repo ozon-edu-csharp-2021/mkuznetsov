@@ -9,7 +9,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
     {
         private readonly IConfiguratorRepository _configuratorRepository;
         public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> SkuSelector { get; init; }
-        public IDictionary<MerchType, ISet<Tuple<SkuGroup, Quantity>>> MerchTemplates { get; init; }
+        public IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> MerchTemplates { get; init; }
 
         public MerchConfigurator(IConfiguratorRepository configuratorRepository)
         {
@@ -26,15 +26,36 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
 
             Dictionary<Sku, Quantity> result = new Dictionary<Sku, Quantity>();
 
-            foreach (var merchItem in templSet)
+            foreach (var mi in templSet)
             {
-                var (skuGroup, quantity) = merchItem.ToValueTuple();
-                var sku = SkuSelector[skuGroup]
-                    .Where(opt => options.Contains(opt.Key))
-                    .Select(opt => opt.Value)
-                    .First();
+                var skuGroup = mi.Key;
+                var quantity = mi.Value;
 
-                result[sku] = quantity;
+                Sku sku = null;
+
+                var keys = new HashSet<SkuOption>(SkuSelector[skuGroup].Keys);
+
+                var intersection = options.Intersect(keys).ToArray();
+
+                if (intersection.Length == 1)
+                {
+                    var opt = intersection[0];
+
+                    sku = SkuSelector[skuGroup][opt];
+                }
+                else if (intersection.Length == 0)
+                {
+                    sku = SkuSelector[skuGroup][skuGroup.DefaultOption];
+                }
+                else
+                {
+                    throw new ApplicationException("Not found SKU");
+                }
+
+                if (sku != null)
+                {
+                    result[sku] = quantity;
+                }
             }
 
             return result;
