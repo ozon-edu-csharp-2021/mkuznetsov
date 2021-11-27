@@ -21,7 +21,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
             _merchConfigurator = merchConfigurator;
         }
         
-        public async Task<MerchStatus> OrderMerch(MerchType merchType, EmployeeId employeeId, ISet<SkuOption> merchOptions, CancellationToken cancellationToken = default)
+        public async Task<MerchStatus> OrderMerch(MerchType merchType, long employeeId, ISet<SkuOption> merchOptions, CancellationToken cancellationToken = default)
         {
             var merchStatus = MerchStatus.Unavailable;
 
@@ -43,7 +43,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
                 return merchStatus;
             }
             
-            var merchSet = _merchConfigurator.Configure(merchType, merchOptions);
+            var merchSet = await _merchConfigurator.Configure(merchType, merchOptions);
 
             merchStatus = MerchStatus.Ready;
 
@@ -59,7 +59,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
             return merchStatus;
         }
 
-        private async Task<bool> CheckEmployee(EmployeeId employeeId, MerchType merchType, CancellationToken cancellationToken)
+        private async Task<bool> CheckEmployee(long employeeId, MerchType merchType, CancellationToken cancellationToken)
         {
             var employee = await _employeeRepository.FindByIdAsync(employeeId, cancellationToken);
             
@@ -78,7 +78,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
             return true;
         }
 
-        private async Task<bool> CheckEmployeesMerch(EmployeeId employeeId, MerchType merchType, CancellationToken cancellationToken)
+        private async Task<bool> CheckEmployeesMerch(long employeeId, MerchType merchType, CancellationToken cancellationToken)
         {
             var employeesMerch = await _merchRepository.FindByEmployeeIdAsync(employeeId, cancellationToken);
 

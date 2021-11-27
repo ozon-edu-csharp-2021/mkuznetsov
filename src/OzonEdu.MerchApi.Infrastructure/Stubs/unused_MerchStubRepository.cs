@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 
 namespace OzonEdu.MerchApi.Infrastructure.Stubs
@@ -18,31 +17,31 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             {
                 new Merch(
                     MerchType.WelcomePack,
-                    new EmployeeId(1),
+                    1,
                     new IssueDate(new DateTime(2020, 10, 12)),
                     MerchStatus.Ready,
                     null),
                 new Merch(
                     MerchType.ConferenceListenerPack,
-                    new EmployeeId(1),
+                    1,
                     new IssueDate(new DateTime(2021, 11, 2)),
                     MerchStatus.Ready,
                     null),
                 new Merch(
                     MerchType.VeteranPack,
-                    new EmployeeId(2),
+                    2,
                     new IssueDate(new DateTime(2021, 10, 20)),
                     MerchStatus.Ready,
                     null),
                 new Merch(
                     MerchType.ConferenceSpeakerPack,
-                    new EmployeeId(2),
+                    2,
                     new IssueDate(new DateTime(2021, 11, 2)),
                     MerchStatus.Ready,
                     null),
                 new Merch(
                     MerchType.ConferenceListenerPack,
-                    new EmployeeId(3),
+                    3,
                     new IssueDate(new DateTime(2021, 11, 2)),
                     MerchStatus.Ready,
                     new Dictionary<Sku, Quantity>
@@ -53,13 +52,11 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             };
         }
         
-        public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(EmployeeId employeeId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default)
         {
-            IEnumerable<Merch> merches = null;
-            
             _merches = await FindAll(cancellationToken);
             
-            var res = _merches.Where(m => m.EmployeeId.Value == employeeId.Value);
+            var res = _merches.Where(m => m.EmployeeId == employeeId);
 
             return res;
         }

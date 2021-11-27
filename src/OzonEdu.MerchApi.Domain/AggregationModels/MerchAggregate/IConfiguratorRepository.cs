@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
 {
     public interface IConfiguratorRepository
     {
-        public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> GetSkuSet();
+        public Task<IDictionary<SkuGroup, IDictionary<SkuOption, Sku>>> GetSkuSet(CancellationToken cancellationToken = default);
         
-        public IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> GetMerchTemplates();
+        public Task<IDictionary<MerchType, IDictionary<SkuGroup, Quantity>>> GetMerchTemplates(CancellationToken cancellationToken = default);
     }
 }

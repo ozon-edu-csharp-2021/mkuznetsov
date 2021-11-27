@@ -35,6 +35,7 @@ namespace OzonEdu.MerchApi.GrpcServices
                         OrderStatus merchStatus;
                         return new GetHistoryResponseUnit
                         {
+                            Id = merch.Id,
                             EmployeeId = merch.EmployeeId,
                             IssueDate = merch.IssueDate.ToString(),
                             MerchType = MerchType.TryParse(merch.MerchType.ToString(), out merchType)

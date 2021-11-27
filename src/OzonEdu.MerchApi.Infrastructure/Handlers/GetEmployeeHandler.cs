@@ -16,6 +16,6 @@ namespace OzonEdu.MerchApi.Infrastructure.Handlers
         }
 
         public Task<Employee> Handle(GetEmployeeRequest request, CancellationToken cancellationToken) =>
-            _employeeRepository.FindByIdAsync(new EmployeeId(request.EmployeeId), cancellationToken);
+            _employeeRepository.FindByIdAsync(request.EmployeeId, cancellationToken);
     }
 }

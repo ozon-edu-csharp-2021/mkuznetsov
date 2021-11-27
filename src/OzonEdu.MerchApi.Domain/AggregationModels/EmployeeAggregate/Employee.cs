@@ -4,7 +4,6 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate
 {
     public class Employee : Entity
     {
-        public EmployeeId EmployeeId { get; }
         public FirstName FirstName { get; }
         public LastName LastName { get; }
         public MiddleName MiddleName { get; }
@@ -13,7 +12,7 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate
         public Email Email { get; }
         
         public Employee(
-            EmployeeId id,
+            long id,
             FirstName firstName,
             LastName lastName,
             MiddleName middleName,
@@ -21,7 +20,7 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate
             HiringDate hiringDate,
             Email email)
         {
-            EmployeeId = id;
+            Id = id;
             FirstName = firstName;
             LastName = lastName;
             MiddleName = middleName;

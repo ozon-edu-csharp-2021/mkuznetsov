@@ -6,6 +6,7 @@ namespace OzonEdu.MerchApi.Infrastructure.HttpModels
 {
     public class MerchInfo
     {
+        public long Id { get; set; }
         public MerchType MerchType { get; set; }
         
         public long EmployeeId { get; set; }

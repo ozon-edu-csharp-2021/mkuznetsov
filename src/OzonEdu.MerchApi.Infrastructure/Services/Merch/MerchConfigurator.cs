@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 
 namespace OzonEdu.MerchApi.Infrastructure.Services
@@ -8,20 +10,20 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
     public class MerchConfigurator : IMerchConfigurator
     {
         private readonly IConfiguratorRepository _configuratorRepository;
-        private IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> SkuSelector { get; init; }
-        private IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> MerchTemplates { get; init; }
+        private IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> SkuSelector { get; set; }
+        private IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> MerchTemplates { get; set; }
 
         public MerchConfigurator(IConfiguratorRepository configuratorRepository)
         {
             _configuratorRepository = configuratorRepository;
-
-            SkuSelector = _configuratorRepository.GetSkuSet();
-
-            MerchTemplates = _configuratorRepository.GetMerchTemplates();
         }
         
-        public Dictionary<Sku, Quantity> Configure(MerchType merchType, ISet<SkuOption> options)
+        public async Task<Dictionary<Sku, Quantity>> Configure(MerchType merchType, ISet<SkuOption> options, CancellationToken cancellationToken = default)
         {
+            SkuSelector = await _configuratorRepository.GetSkuSet(cancellationToken);
+
+            MerchTemplates = await _configuratorRepository.GetMerchTemplates(cancellationToken);
+            
             var templSet = MerchTemplates[merchType];
 
             Dictionary<Sku, Quantity> result = new Dictionary<Sku, Quantity>();

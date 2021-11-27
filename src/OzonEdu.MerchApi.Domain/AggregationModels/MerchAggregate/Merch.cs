@@ -8,29 +8,24 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
     public class Merch : Entity
     {
         public MerchType MerchType { get; }
-        public EmployeeId EmployeeId { get; }
+        public long EmployeeId { get; }
         public IssueDate IssueDate { get; }
         public MerchStatus MerchStatus { get; }
         public Dictionary<Sku, Quantity> SkuSet { get; }
 
-        public Merch(
+        public Merch
+        (
             MerchType merchType,
-            EmployeeId employeeId,
+            long employeeId,
             IssueDate issueDate,
             MerchStatus merchStatus,
-            Dictionary<Sku, Quantity> skuSet)
-        {
-            MerchType = merchType;
-            EmployeeId = employeeId;
-            IssueDate = issueDate;
-            MerchStatus = merchStatus;
-            SkuSet = skuSet;
-        }
+            Dictionary<Sku, Quantity> skuSet
+        ) : this(0, merchType, employeeId, issueDate, merchStatus, skuSet){ }
         
         public Merch(
             long id,
             MerchType merchType,
-            EmployeeId employeeId,
+            long employeeId,
             IssueDate issueDate,
             MerchStatus merchStatus,
             Dictionary<Sku, Quantity> skuSet)

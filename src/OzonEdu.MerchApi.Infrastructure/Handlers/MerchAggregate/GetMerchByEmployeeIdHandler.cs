@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.Infrastructure.HttpModels;
 using OzonEdu.MerchApi.Infrastructure.Queries;
@@ -24,7 +22,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
             CancellationToken cancellationToken)
         {
             var merchList =
-                await _merchRepository.FindByEmployeeIdAsync(new EmployeeId(request.EmployeeId), cancellationToken);
+                await _merchRepository.FindByEmployeeIdAsync(request.EmployeeId, cancellationToken);
 
             return PrepareResponse(merchList);
         }
@@ -39,9 +37,10 @@ namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
                 ?.ToDictionary(t => t.Key.Value, t => t.Value.Value );
 
             return new MerchInfo
-                {
+            {
+                Id = merch.Id,
                 MerchType = (MType) merch.MerchType.Id,
-                EmployeeId = merch.EmployeeId.Value,
+                EmployeeId = merch.EmployeeId,
                 IssueDate = merch.IssueDate.Value,
                 MerchStatus = (MerchStatus) merch.MerchStatus.Id,
                 SkuSet = skus

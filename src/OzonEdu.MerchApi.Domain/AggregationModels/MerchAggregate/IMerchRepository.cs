@@ -8,7 +8,7 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
 {
     public interface IMerchRepository : IRepository<Merch>
     {
-        Task<IEnumerable<Merch>> FindByEmployeeIdAsync(EmployeeId employeeId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Merch>> FindByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Merch>> FindAll(CancellationToken cancellationToken = default);
 

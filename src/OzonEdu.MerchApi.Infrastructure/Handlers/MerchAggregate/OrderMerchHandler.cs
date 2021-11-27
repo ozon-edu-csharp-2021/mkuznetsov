@@ -26,7 +26,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
                 .Select(d => new SkuOption(d))
                 .ToHashSet();
             
-            return _merchService.OrderMerch(MerchType.FromValue<MerchType>((int)request.MerchType), new EmployeeId(request.EmployeeId), options, cancellationToken);
+            return _merchService.OrderMerch(MerchType.FromValue<MerchType>((int)request.MerchType), request.EmployeeId, options, cancellationToken);
         }
     }
 }

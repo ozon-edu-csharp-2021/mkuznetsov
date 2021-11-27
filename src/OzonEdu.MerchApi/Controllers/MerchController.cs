@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.Infrastructure.Commands;
 using OzonEdu.MerchApi.Infrastructure.HttpModels;
 using OzonEdu.MerchApi.Infrastructure.Queries;
@@ -20,7 +19,7 @@ namespace OzonEdu.MerchApi.Controllers
         public MerchController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("[action]/{employeeId:long}")]
-        public async Task<ActionResult<IEnumerable<Merch>>> History(long employeeId, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<MerchInfo>>> History(long employeeId, CancellationToken cancellationToken)
         {
             var query = new GetMerchByEmployeeIdQuery
             {

@@ -9,7 +9,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Services
 {
     public interface IMerchService
     {
-        public Task<MerchStatus> OrderMerch(MerchType merchType, EmployeeId employeeId, ISet<SkuOption> merchOptions,
+        public Task<MerchStatus> OrderMerch(MerchType merchType, long employeeId, ISet<SkuOption> merchOptions,
             CancellationToken cancellationToken = default);
     }
 }

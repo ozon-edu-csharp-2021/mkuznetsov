@@ -16,7 +16,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             _employees = new List<Employee>
             {
                 new Employee(
-                    new EmployeeId(1),
+                    1,
                     new FirstName("Василий"),
                     new LastName("Пупкин"),
                     new MiddleName("Фёдорович"),
@@ -24,7 +24,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                     new HiringDate(new DateTime(2020, 05, 12)),
                     new Email("pupkin@ozon.ru")),
                 new Employee(
-                    new EmployeeId(2),
+                    2,
                     new FirstName("Владимир"),
                     new LastName("Ленин"),
                     new MiddleName("Ильич"),
@@ -32,7 +32,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                     new HiringDate(new DateTime(2021, 10, 11)),
                     new Email("lenin@ozon.ru")),
                 new Employee(
-                    new EmployeeId(3),
+                    3,
                     new FirstName("Джеймс"),
                     new LastName("Бонд"),
                     new MiddleName("Янович"),
@@ -42,12 +42,12 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             };
         }
         
-        public async Task<Employee> FindByIdAsync(EmployeeId id, CancellationToken cancellationToken = default)
+        public async Task<Employee> FindByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             Employee employee = null;
             if (_employees != null)
             {
-                employee = _employees.First(e => e.EmployeeId.Equals(id));
+                employee = _employees.First(e => e.Id == id);
             }
 
             if (employee != null)

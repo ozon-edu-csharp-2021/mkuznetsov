@@ -33,7 +33,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Extensions
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IConfiguratorRepository, ConfiguratorStubMemoryRepository>();
+            services.AddScoped<IConfiguratorRepository, ConfiguratorRepository>();
             services.AddScoped<IMerchConfigurator, MerchConfigurator>();
             services.AddScoped<IMerchService, MerchService>();
             services.AddScoped<IEmployeeRepository, EmployeeStubRepository>();

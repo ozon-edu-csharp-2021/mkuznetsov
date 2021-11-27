@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 
 namespace OzonEdu.MerchApi.Infrastructure.Stubs
@@ -7,7 +8,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
     public class ConfiguratorStubMemoryRepository : IConfiguratorRepository
     {
         
-        public IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> GetSkuSet()
+        public Task<IDictionary<SkuGroup, IDictionary<SkuOption, Sku>>> GetSkuSet(CancellationToken cancellationToken = default)
         {
             IDictionary<SkuGroup, IDictionary<SkuOption, Sku>> skuSet;
             
@@ -110,10 +111,10 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                 },
             };
 
-            return skuSet;
+            return Task.FromResult(skuSet);
         }
        
-        public IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> GetMerchTemplates()
+        public Task<IDictionary<MerchType, IDictionary<SkuGroup, Quantity>>> GetMerchTemplates(CancellationToken cancellationToken = default)
         {
             IDictionary<MerchType, IDictionary<SkuGroup, Quantity>> merchTemplates;
             
@@ -142,7 +143,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
                 {new SkuGroup("earplug", new SkuOption("small")), new Quantity(2)}
             };
 
-            return merchTemplates;
+            return Task.FromResult(merchTemplates);
         }
     }
 }

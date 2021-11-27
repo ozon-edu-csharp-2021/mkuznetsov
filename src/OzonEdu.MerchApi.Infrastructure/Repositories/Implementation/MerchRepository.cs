@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
-using OzonEdu.MerchApi.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.Infrastructure.Infrastructure.Interfaces;
 using OzonEdu.MerchApi.Infrastructure.Repositories.Models;
@@ -22,7 +21,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
             _dbConnectionFactory = dbConnectionFactory;
         }
 
-        public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(EmployeeId employeeId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default)
         {
             const string sql = @"
                 select m.id, m.type_id MerchType, m.merch_status MerchStatus,
@@ -32,7 +31,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
 
             var parameters = new
             {
-                EmployeeId = employeeId.Value,
+                EmployeeId = employeeId,
             };
             
             var commandDefinition = new CommandDefinition(
@@ -41,13 +40,12 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
                 commandTimeout: Timeout,
                 cancellationToken: cancellationToken);
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
-            var merchesDb = await connection.QueryAsync<MerchDb>(
-                commandDefinition);
+            var merchesDb = await connection.QueryAsync<MerchDb>(commandDefinition);
 
             var merches = merchesDb.Select(m => new Merch(
                 m.Id,
                 MerchType.FromValue<MerchType>((int) m.MerchType),
-                new EmployeeId(m.EmployeeId),
+                m.EmployeeId,
                 new IssueDate(m.IssueDate),
                 MerchStatus.FromValue<MerchStatus>((int)m.MerchStatus),
                 new Dictionary<Sku, Quantity>()
@@ -67,8 +65,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
                 commandTimeout: Timeout,
                 cancellationToken: cancellationToken);
             
-            var merchesSku = await connection.QueryAsync<MerchSkuDb>(
-                commandDefinitionSku);
+            var merchesSku = await connection.QueryAsync<MerchSkuDb>(commandDefinitionSku);
 
             foreach (var sku in merchesSku)
             {
@@ -98,7 +95,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
             {
                 MerchType  = merch.MerchType.Id,
                 MerchStatus = merch.MerchStatus.Id,
-                EmployeeId = merch.EmployeeId.Value,
+                EmployeeId = merch.EmployeeId,
                 IssueDate = merch.IssueDate.Value
             };
             var commandDefinition = new CommandDefinition(
