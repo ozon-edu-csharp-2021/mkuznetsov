@@ -129,5 +129,15 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
             
             return true;
         }
+
+        public Task<IEnumerable<Merch>> FindByStatusAndSku(MerchStatus merchStatus, IEnumerable<Sku> skus, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> SetStatus(Merch merch, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

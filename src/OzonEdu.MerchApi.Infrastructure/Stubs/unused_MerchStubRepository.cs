@@ -72,5 +72,15 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
 
             return true;
         }
+
+        public Task<IEnumerable<Merch>> FindByStatusAndSku(MerchStatus merchStatus, IEnumerable<Sku> skus, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SetStatus(Merch merch, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
