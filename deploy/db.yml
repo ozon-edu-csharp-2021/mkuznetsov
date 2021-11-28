@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  merch-api-db:
+    image: postgres:latest
+    ports:
+      - "5425:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: merchApiPassword
+      POSTGRES_DB: merch-api
+    volumes:
+      - ./db/merch-api-postgres-db/dbdata:/var/lib/postgresql/data"
+
+  stock-api-db:
+    image: postgres:latest
+    ports:
+      - "5427:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: c
+      POSTGRES_DB: stock-api
+    volumes:
+      - ./db/stock-api-postgres-db/dbdata:/var/lib/postgresql/data

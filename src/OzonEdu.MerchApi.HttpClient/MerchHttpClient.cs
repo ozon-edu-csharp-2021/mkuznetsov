@@ -4,8 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MsHttp = System.Net.Http;
-using OzonEdu.MerchApi.HttpModels.Request;
-using OzonEdu.MerchApi.HttpModels.Response;
+using OzonEdu.MerchApi.Infrastructure.HttpModels;
 
 namespace OzonEdu.MerchApi.HttpClient
 {
@@ -20,20 +19,20 @@ namespace OzonEdu.MerchApi.HttpClient
             _serverUrl = serverUrl;
         }
 
-        public async Task<IReadOnlyList<MerchHistoryResult>?> GetHistory(long employeeId, CancellationToken token)
+        public async Task<IReadOnlyList<MerchInfo>?> GetHistory(long employeeId, CancellationToken token)
         {
             using var response = await _httpClient.GetAsync($"{_serverUrl}/api/merch/history/{employeeId}", token);
             var body = await response.Content.ReadAsStringAsync(token);
-            return JsonSerializer.Deserialize<List<MerchHistoryResult>>(body);
+            return JsonSerializer.Deserialize<List<MerchInfo>>(body);
         }
 
-        public async Task<MerchOrderResult> MakeOrder(MerchOrderPost merchOrder, CancellationToken token)
+        public async Task<MerchStatus> MakeOrder(MerchOrderPost merchOrder, CancellationToken token)
         {
             var json = JsonSerializer.Serialize(merchOrder);
             MsHttp.HttpContent content = new MsHttp.StringContent(json);
             using var response = await _httpClient.PostAsync($"{_serverUrl}/api/merch/order", content, token);
             var body = await response.Content.ReadAsStringAsync(token);
-            return JsonSerializer.Deserialize<MerchOrderResult>(body) ?? throw new InvalidOperationException();
+            return JsonSerializer.Deserialize<MerchStatus>(body);
         }
     }
 }
