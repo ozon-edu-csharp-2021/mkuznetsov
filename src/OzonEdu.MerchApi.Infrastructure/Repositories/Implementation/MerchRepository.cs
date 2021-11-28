@@ -21,13 +21,16 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
             _dbConnectionFactory = dbConnectionFactory;
         }
 
-        public async Task<IEnumerable<Merch>> FindByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<Merch>> FindByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default)
         {
             const string sql = @"
                 select m.id, m.type_id MerchType, m.merch_status MerchStatus,
-                       m.employee_id EmployeeId, m.issue_date IssueDate
+                       m.employee_id EmployeeId, m.issue_date IssueDate,
+                       s.sku_id SkuId, s.quantity Quantity
                   from merches m
-                 where m.employee_id = @EmployeeId";
+                  left join merch_sku s
+                    on m.id = s.merch_id 
+                 where m.employee_id = @EmployeeId;";
 
             var parameters = new
             {
@@ -39,51 +42,77 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
                 parameters: parameters,
                 commandTimeout: Timeout,
                 cancellationToken: cancellationToken);
-            var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
-            var merchesDb = await connection.QueryAsync<MerchDb>(commandDefinition);
 
-            var merches = merchesDb.Select(m => new Merch(
-                m.Id,
-                MerchType.FromValue<MerchType>((int) m.MerchType),
-                m.EmployeeId,
-                new IssueDate(m.IssueDate),
-                MerchStatus.FromValue<MerchStatus>((int)m.MerchStatus),
-                new Dictionary<Sku, Quantity>()
-                ))
-                .ToDictionary(m => m.Id, m => m);
+            return FindMerch(commandDefinition, cancellationToken);
+        }
 
-            const string sqlSku = @"
-                select ms.merch_id MerchId, ms.sku_id SkuId, ms.quantity 
+        public Task<IEnumerable<Merch>> FindByStatusAndSku(MerchStatus merchStatus, IEnumerable<Sku> skus, CancellationToken cancellationToken = default)
+        {
+            const string sql = @"
+                select m.id, m.type_id MerchType, m.merch_status MerchStatus,
+                       m.employee_id EmployeeId, m.issue_date IssueDate,
+                       s.sku_id SkuId, s.quantity Quantity
                   from merches m
-                  join merch_sku ms
-                    on m.id = ms.merch_id
-                 where m.employee_id = @EmployeeId";
+                  left join merch_sku s
+                    on m.id = s.merch_id 
+                 where m.merch_status = @MerchStatus
+                   and s.sku_id = ANY(@Skus);";
+
+            var parameters = new
+            {
+                MerchStatus = merchStatus.Id,
+                Skus = skus.Select(s => s.Value).ToArray()
+            };
             
-            var commandDefinitionSku = new CommandDefinition(
-                sqlSku,
+            var commandDefinition = new CommandDefinition(
+                sql,
                 parameters: parameters,
                 commandTimeout: Timeout,
                 cancellationToken: cancellationToken);
             
-            var merchesSku = await connection.QueryAsync<MerchSkuDb>(commandDefinitionSku);
+            return FindMerch(commandDefinition, cancellationToken);
+        }
 
-            foreach (var sku in merchesSku)
+        private async Task<IEnumerable<Merch>> FindMerch(CommandDefinition commandDefinition, CancellationToken cancellationToken = default)
+        {
+            var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            var merchLines = await connection.QueryAsync<MerchDb>(commandDefinition);
+
+            var merchDict = new Dictionary<long, Merch>();
+            
+            foreach (var m in merchLines)
             {
-                merches[sku.MerchId].SkuSet[new Sku(sku.SkuId)] = new Quantity(sku.Quantity);
+                Merch merch = null;
+
+                if (merchDict.ContainsKey(m.Id))
+                {
+                    merch = merchDict[m.Id];
+                }
+                else
+                {
+                    merch = new Merch(
+                        m.Id,
+                        MerchType.FromValue<MerchType>((int) m.MerchType),
+                        m.EmployeeId,
+                        new IssueDate(m.IssueDate),
+                        MerchStatus.FromValue<MerchStatus>((int) m.MerchStatus),
+                        new Dictionary<Sku, Quantity>()
+                    );
+                    merchDict[m.Id] = merch;
+                }
+
+                var sku = new Sku(m.SkuId);
+                var quantity = new Quantity(m.Quantity);
+
+                merch.SkuSet[sku] = quantity;
             }
 
-            var result = merches.ToHashSet()
-                .Select(kv => kv.Value)
-                .ToList();
-            
+            var result = merchDict.Select(kv => kv.Value)
+                .ToHashSet();
+
             return result;
         }
-
-        public Task<IEnumerable<Merch>> FindAll(CancellationToken cancellationToken = default)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         public async Task<bool> Insert(Merch merch, CancellationToken cancellationToken = default)
         {
             const string sql = @"
@@ -129,13 +158,8 @@ namespace OzonEdu.MerchApi.Infrastructure.Repositories.Implementation
             
             return true;
         }
-
-        public Task<IEnumerable<Merch>> FindByStatusAndSku(MerchStatus merchStatus, IEnumerable<Sku> skus, CancellationToken cancellationToken = default)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<bool> SetStatus(Merch merch, CancellationToken cancellationToken = default)
+        
+        public Task<bool> UpdateStatus(Merch merch, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }

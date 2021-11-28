@@ -10,12 +10,10 @@ namespace OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate
     {
         Task<IEnumerable<Merch>> FindByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Merch>> FindAll(CancellationToken cancellationToken = default);
-
         Task<bool> Insert(Merch merch, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Merch>> FindByStatusAndSku(MerchStatus merchStatus, IEnumerable<Sku> skus, CancellationToken cancellationToken = default);
 
-        Task<bool> SetStatus(Merch merch, CancellationToken cancellationToken = default);
+        Task<bool> UpdateStatus(Merch merch, CancellationToken cancellationToken = default);
     }
 }

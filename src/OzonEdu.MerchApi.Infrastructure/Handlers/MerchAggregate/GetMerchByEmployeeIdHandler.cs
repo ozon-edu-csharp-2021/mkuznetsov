@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using OzonEdu.MerchApi.Domain.AggregationModels.MerchAggregate;
 using OzonEdu.MerchApi.Infrastructure.HttpModels;
 using OzonEdu.MerchApi.Infrastructure.Queries;
-using MerchStatus = OzonEdu.MerchApi.Infrastructure.HttpModels.MerchStatus;
-using MType = CSharpCourse.Core.Lib.Enums.MerchType;
 
 namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
 {
-    public class GetMerchByEmployeeIdHandler : IRequestHandler<GetMerchByEmployeeIdQuery, IEnumerable<MerchInfo>>
+    public class GetMerchByEmployeeIdHandler : GetMerchHandler, IRequestHandler<GetMerchByEmployeeIdQuery, IEnumerable<MerchInfo>>
     {
         private readonly IMerchRepository _merchRepository;
 
@@ -27,24 +24,24 @@ namespace OzonEdu.MerchApi.Infrastructure.Handlers.MerchAggregate
             return PrepareResponse(merchList);
         }
 
-        private IEnumerable<MerchInfo> PrepareResponse(IEnumerable<Merch> merchList) =>
-            merchList.Select(m => ConvertMerch(m)).ToList();
+        // private IEnumerable<MerchInfo> PrepareResponse(IEnumerable<Merch> merchList) =>
+        //     merchList.Select(m => ConvertMerch(m)).ToList();
         
 
-        private MerchInfo ConvertMerch(Merch merch)
-        {
-            var skus = merch.SkuSet
-                ?.ToDictionary(t => t.Key.Value, t => t.Value.Value );
-
-            return new MerchInfo
-            {
-                Id = merch.Id,
-                MerchType = (MType) merch.MerchType.Id,
-                EmployeeId = merch.EmployeeId,
-                IssueDate = merch.IssueDate.Value,
-                MerchStatus = (MerchStatus) merch.MerchStatus.Id,
-                SkuSet = skus
-            };
-        }
+        // private MerchInfo ConvertMerch(Merch merch)
+        // {
+        //     var skus = merch.SkuSet
+        //         ?.ToDictionary(t => t.Key.Value, t => t.Value.Value );
+        //
+        //     return new MerchInfo
+        //     {
+        //         Id = merch.Id,
+        //         MerchType = (MType) merch.MerchType.Id,
+        //         EmployeeId = merch.EmployeeId,
+        //         IssueDate = merch.IssueDate.Value,
+        //         MerchStatus = (MerchStatus) merch.MerchStatus.Id,
+        //         SkuSet = skus
+        //     };
+        // }
     }
 }

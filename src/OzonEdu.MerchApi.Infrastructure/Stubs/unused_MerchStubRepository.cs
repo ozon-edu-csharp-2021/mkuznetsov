@@ -78,7 +78,7 @@ namespace OzonEdu.MerchApi.Infrastructure.Stubs
             throw new NotImplementedException();
         }
 
-        public Task<bool> SetStatus(Merch merch, CancellationToken cancellationToken = default)
+        public Task<bool> UpdateStatus(Merch merch, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

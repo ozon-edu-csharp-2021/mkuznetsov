@@ -45,5 +45,19 @@ namespace OzonEdu.MerchApi.Controllers
 
             return Ok(result);
         }
+        
+        [HttpPost("[action]")]
+        public async Task<ActionResult<IEnumerable<MerchInfo>>> StatusSku(MerchStatusSkuPost merchStatusSkuPost, CancellationToken cancellationToken)
+        {
+            var query = new GetMerchByStatusSkuQuery()
+            {
+                MerchStatus = merchStatusSkuPost.MerchStatus,
+                Skus = merchStatusSkuPost.Skus
+            };
+            
+            var result = await _mediator.Send(query, cancellationToken);
+
+            return Ok(result);
+        }
     }
 }
